@@ -47,18 +47,3 @@ class SQLiteConnector:
                 self._connection.execute(query, data_tupple)
             except Exception as e:
                 print(f'Writing to database failed. Error message:\n{e}')
-    
-    def get_info(self):
-        self._connection.execute('''select * from unique_tracks''')
-        #     select 
-        #         artist, count(*) as number_of_plays 
-        #     from triplets_sample
-        #     left join (
-        #         select distinct track_id, artist
-        #         from unique_tracks
-        #     ) artists
-        #     on artists.track_id = unique_tracks.track_id
-        #     order by number_of_plays desc
-        # ''')
-
-        print(self._connection.fetchone())
