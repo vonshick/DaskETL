@@ -6,12 +6,12 @@ def print_desired_summaries(track_plays_summary, tracks_summary):
     track_plays_summary_ordered = iter(
         dict(sorted(track_plays_summary.items(), key=lambda item: -item[1])))
 
-    print('Five the most popular tracks:\n')
+    print('Five the most popular tracks:')
     counter = 0
     while(counter < 5):
         track_id = next(track_plays_summary_ordered)
         if track_id in tracks_summary:
-            print(f'{tracks_summary[track_id]} - plays {track_plays_summary[track_id]}')
+            print(f'{tracks_summary[track_id]} - {track_plays_summary[track_id]} plays')
             counter += 1
         else:
             print(f'Track ID {track_id} was not found in unique_tracks.txt!')
@@ -29,7 +29,8 @@ def print_desired_summaries(track_plays_summary, tracks_summary):
 
     plays_per_artist_ordered = iter(dict(sorted(plays_per_artist.items(), key=lambda item: -item[1])))
     most_popular_artist = next(plays_per_artist_ordered)
-    print(f'The most popular artist:\n {most_popular_artist}')
+    most_popular_artist_plays = plays_per_artist[most_popular_artist]
+    print(f'\nThe most popular artist: {most_popular_artist} ({most_popular_artist_plays} plays)')
 
 
 def process_triplets_sample(db_connector, insert_data_to_db):
@@ -77,13 +78,7 @@ def main():
     processing_start_time = time()
 
     track_plays_summary = process_triplets_sample(db_connector, insert_data_to_db)
-    track_plays_time = time()
-    print(f'track_plays_time: {track_plays_time - processing_start_time} seconds')
-
     tracks_summary = process_unique_tracks(db_connector, insert_data_to_db)
-    track_summary_time = time()
-    print(f'track_summary_time: {track_summary_time - track_plays_time} seconds')
-
     print_desired_summaries(track_plays_summary, tracks_summary)
 
     print(f'Processing time: {time() - processing_start_time} seconds')
