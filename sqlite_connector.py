@@ -38,6 +38,7 @@ class SQLiteConnector:
                 error_query = 'INSERT INTO error_logs VALUES (?,?,?)'
                 print(error_message)
                 self._connection.execute(error_query, error_triple)
+                self._connection.commit()
             except Exception as e:
                 print(f'Writing logs to database failed. Error message:\n{e}')
         else:
@@ -45,5 +46,6 @@ class SQLiteConnector:
             query = f'INSERT INTO {table_name} VALUES ({param_string})'
             try:
                 self._connection.execute(query, data_tupple)
+                self._connection.commit()
             except Exception as e:
                 print(f'Writing to database failed. Error message:\n{e}')
