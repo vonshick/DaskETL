@@ -2,20 +2,26 @@ from sqlite_connector import SQLiteConnector
 from time import time
 
 
-def print_desired_summaries(track_plays_summary, tracks_summary):
+def print_most_popular_tracks(track_plays_summary, tracks_summary):
     track_plays_summary_ordered = iter(
         dict(sorted(track_plays_summary.items(), key=lambda item: -item[1])))
 
-    print('Five the most popular tracks:')
+    # counter used on purpose because it's incremented inside 'if' statement
     counter = 0
+    print('\nFive the most popular tracks:')
     while(counter < 5):
         track_id = next(track_plays_summary_ordered)
         if track_id in tracks_summary:
-            print(f'{tracks_summary[track_id]} - {track_plays_summary[track_id]} plays')
             counter += 1
+            artist = tracks_summary[track_id][0]
+            title = tracks_summary[track_id][1]
+            plays_number = track_plays_summary[track_id]
+            print(f'{counter}. {title} - {artist} - {plays_number} plays')
         else:
             print(f'Track ID {track_id} was not found in unique_tracks.txt!')
 
+
+def print_most_popular_artist(track_plays_summary, tracks_summary):
     plays_per_artist = dict()
 
     for track_id in iter(tracks_summary):
@@ -27,10 +33,11 @@ def print_desired_summaries(track_plays_summary, tracks_summary):
             else:
                 plays_per_artist[artist] = track_plays
 
-    plays_per_artist_ordered = iter(dict(sorted(plays_per_artist.items(), key=lambda item: -item[1])))
+    plays_per_artist_ordered = iter(
+        dict(sorted(plays_per_artist.items(), key=lambda item: -item[1])))
     most_popular_artist = next(plays_per_artist_ordered)
-    most_popular_artist_plays = plays_per_artist[most_popular_artist]
-    print(f'\nThe most popular artist: {most_popular_artist} ({most_popular_artist_plays} plays)')
+    plays_number = plays_per_artist[most_popular_artist]
+    print(f'\nThe most popular artist:\n{most_popular_artist} - {plays_number} plays\n')
 
 
 def process_triplets_sample(db_connector, insert_data_to_db):
@@ -79,9 +86,10 @@ def main():
 
     track_plays_summary = process_triplets_sample(db_connector, insert_data_to_db)
     tracks_summary = process_unique_tracks(db_connector, insert_data_to_db)
-    print_desired_summaries(track_plays_summary, tracks_summary)
+    print_most_popular_tracks(track_plays_summary, tracks_summary)
+    print_most_popular_artist(track_plays_summary, tracks_summary)
 
-    print(f'Processing time: {time() - processing_start_time} seconds')
+    print(f'Processing time: {time() - processing_start_time} seconds\n')
 
 
 if __name__ == '__main__':
