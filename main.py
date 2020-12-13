@@ -6,7 +6,7 @@ def print_most_popular_tracks(track_plays_summary, tracks_summary):
     track_plays_summary_ordered = iter(
         dict(sorted(track_plays_summary.items(), key=lambda item: -item[1])))
 
-    # counter used on purpose because it's incremented inside 'if' statement
+    # counter used on purpose because it's incremented inside the 'if' statement
     counter = 0
     print('\nFive the most popular tracks:')
     while(counter < 5):
